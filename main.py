@@ -17,7 +17,7 @@ def cli():
     """CLI for Video Games Management"""
     pass
 
-# 📌 Add a new game
+# Add a new game
 @click.command()
 @click.option('--game_id', type=int, help="Game ID (optional, auto-generated if not provided)")
 @click.option('--name', prompt='Game Title')
@@ -34,10 +34,10 @@ def add_game(game_id, name, year):
 
     session.add(game)
     session.commit()
-    click.echo(f"✅ New game added: ID {game.id}, Title '{game.title}' ({game.year})")
+    click.echo(f"New game added: ID {game.id}, Title '{game.title}' ({game.year})")
     session.close()
 
-# 📌 Add or update game details
+#  Add or update game details
 @click.command()
 @click.option('--game_id', prompt='Game ID', type=int)
 @click.option('--details', prompt="Game Details")
@@ -49,7 +49,7 @@ def add_game_details(game_id, details, platform, genre):
     game = session.query(Game).filter(Game.id == game_id).first()
 
     if not game:
-        click.echo("❌ Game not found.")
+        click.echo("Game not found.")
         session.close()
         return
 
@@ -69,10 +69,10 @@ def add_game_details(game_id, details, platform, genre):
         game.genres.append(genre_obj)
 
     session.commit()
-    click.echo(f"✅ Updated details for {game.title}: {details} (Platform: {platform}, Genre: {genre})")
+    click.echo(f"Updated details for {game.title}: {details} (Platform: {platform}, Genre: {genre})")
     session.close()
 
-# 📌 View all games
+# View all games
 @click.command()
 def list_games():
     """Lists all games and their details"""
@@ -80,20 +80,20 @@ def list_games():
     games = session.query(Game).all()
 
     if not games:
-        click.echo("📭 No games found.")
+        click.echo("No games found.")
         session.close()
         return
 
-    click.echo("\n🎮 Your Video Games Collection:\n")
+    click.echo("\n  Your Video Games Collection:\n")
     for game in games:
         genres = ', '.join([genre.name for genre in game.genres]) if game.genres else "None"
-        details = f"📝 Details: {game.details.bio} | 🖥️ Platform: {game.details.platform}" if game.details else "No additional details available."
+        details = f" Details: {game.details.bio} | Platform: {game.details.platform}" if game.details else "No additional details available."
         rank = game.rank if hasattr(game, 'rank') else "Not Ranked"
-        click.echo(f"📌 {game.id}: {game.title} ({game.year})\n   🔹 Genres: {genres}\n   {details}\n   ⭐ Rank: {rank}\n")
+        click.echo(f" {game.id}: {game.title} ({game.year})\n    Genres: {genres}\n   {details}\n    Rank: {rank}\n")
     
     session.close()
 
-# 📌 Edit a game
+#  Edit a game
 @click.command()
 @click.option('--game_id', prompt='Game ID', type=int)
 @click.option('--new_title', prompt='New Game Title', default=None)
@@ -104,7 +104,7 @@ def edit_game(game_id, new_title, new_year):
     game = session.query(Game).filter(Game.id == game_id).first()
 
     if not game:
-        click.echo("❌ Game not found.")
+        click.echo("Game not found.")
         session.close()
         return
 
@@ -114,33 +114,33 @@ def edit_game(game_id, new_title, new_year):
         game.year = new_year
 
     session.commit()
-    click.echo(f"✅ Game updated: {game.title} ({game.year})")
+    click.echo(f" Game updated: {game.title} ({game.year})")
     session.close()
 
-# 📌 Rank a game
+#  Rank a game
 @click.command()
 @click.option('--game_id', prompt='Game ID', type=int)
 @click.option('--rank', prompt='Rank (1-10)', type=int)
 def rank_game(game_id, rank):
     """Ranks a game from 1 to 10"""
     if rank < 1 or rank > 10:
-        click.echo("❌ Rank must be between 1 and 10.")
+        click.echo(" Rank must be between 1 and 10.")
         return
 
     session = SessionLocal()
     game = session.query(Game).filter(Game.id == game_id).first()
 
     if not game:
-        click.echo("❌ Game not found.")
+        click.echo(" Game not found.")
         session.close()
         return
 
     game.rank = rank  # Assuming Game model has 'rank' column
     session.commit()
-    click.echo(f"✅ {game.title} ranked {rank}/10")
+    click.echo(f" {game.title} ranked {rank}/10")
     session.close()
 
-# 📌 Sort games
+# Sort games
 @click.command()
 @click.option('--by', prompt='Sort by (title/year/rank)', type=click.Choice(['title', 'year', 'rank']))
 def sort_games(by):
@@ -149,24 +149,24 @@ def sort_games(by):
     order_column = getattr(Game, by, None)
 
     if order_column is None:
-        click.echo("❌ Invalid sort option.")
+        click.echo(" Invalid sort option.")
         session.close()
         return
 
     games = session.query(Game).order_by(order_column).all()
 
     if not games:
-        click.echo("📭 No games found.")
+        click.echo(" No games found.")
         session.close()
         return
 
-    click.echo(f"\n📌 Games sorted by {by}:\n")
+    click.echo(f"\n Games sorted by {by}:\n")
     for game in games:
-        click.echo(f"🎮 {game.title} ({game.year}) - Rank: {game.rank if hasattr(game, 'rank') else 'Not Ranked'}")
+        click.echo(f" {game.title} ({game.year}) - Rank: {game.rank if hasattr(game, 'rank') else 'Not Ranked'}")
     
     session.close()
 
-# 📌 Delete a game
+#  Delete a game
 @click.command()
 @click.option('--game_id', prompt='Game ID', type=int)
 def delete_game(game_id):
@@ -175,13 +175,13 @@ def delete_game(game_id):
     game = session.query(Game).filter(Game.id == game_id).first()
 
     if not game:
-        click.echo("❌ Game not found.")
+        click.echo(" Game not found.")
         session.close()
         return
 
     session.delete(game)
     session.commit()
-    click.echo(f"✅ Deleted {game.title}")
+    click.echo(f" Deleted {game.title}")
     session.close()
 
 # Register commands

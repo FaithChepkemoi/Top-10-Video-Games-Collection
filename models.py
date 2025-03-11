@@ -14,7 +14,7 @@ game_genre_association = Table(
 class Game(Base):
     __tablename__ = 'games'
 
-    id = Column(Integer, primary_key=True, autoincrement=True)  # Ensure IDs auto-increment
+    id = Column(Integer, primary_key=True, autoincrement=True)  #  IDs auto-increment
     title = Column(String, nullable=False, unique=True)  # Ensure titles are unique
     year = Column(Integer, nullable=False)
     rank = Column(Integer, nullable=True)  # Add rank column
@@ -41,6 +41,6 @@ class Genre(Base):
     games = relationship("Game", secondary=game_genre_association, back_populates="genres")
 
 # Database connection and table creation
-DATABASE_URL = "sqlite:///games.db"  # Keeping consistent with `main.py`
+DATABASE_URL = "sqlite:///games.db"  
 engine = create_engine(DATABASE_URL)
 Base.metadata.create_all(engine)
