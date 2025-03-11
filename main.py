@@ -5,7 +5,7 @@ import click
 from models import Base, Game, GameDetails, Genre
 
 # Database setup
-DATABASE_URL = "sqlite:///games.db"  # Change this to your actual database URL
+DATABASE_URL = "sqlite:///games.db"
 engine = create_engine(DATABASE_URL)
 SessionLocal = sessionmaker(bind=engine)
 
@@ -19,15 +19,22 @@ def cli():
 
 # 📌 Add a new game
 @click.command()
+@click.option('--game_id', type=int, help="Game ID (optional, auto-generated if not provided)")
 @click.option('--name', prompt='Game Title')
 @click.option('--year', prompt="Game Year of Production", type=int)
-def add_game(name, year):
+def add_game(game_id, name, year):
     """Adds a new game to the collection"""
     session = SessionLocal()
-    game = Game(title=name, year=year)
+
+    # If game_id is provided, use it; otherwise, let the database assign one
+    if game_id:
+        game = Game(id=game_id, title=name, year=year)
+    else:
+        game = Game(title=name, year=year)
+
     session.add(game)
     session.commit()
-    click.echo(f"✅ New game added: {game.title} ({game.year})")
+    click.echo(f"✅ New game added: ID {game.id}, Title '{game.title}' ({game.year})")
     session.close()
 
 # 📌 Add or update game details
@@ -46,7 +53,6 @@ def add_game_details(game_id, details, platform, genre):
         session.close()
         return
 
-    # Update or create game details
     if game.details:
         game.details.bio = details
         game.details.platform = platform
@@ -54,13 +60,11 @@ def add_game_details(game_id, details, platform, genre):
         game.details = GameDetails(bio=details, platform=platform, game=game)
         session.add(game.details)
 
-    # Check if genre exists
     genre_obj = session.query(Genre).filter(Genre.name == genre).first()
     if not genre_obj:
         genre_obj = Genre(name=genre)
         session.add(genre_obj)
 
-    # Associate genre with game
     if genre_obj not in game.genres:
         game.genres.append(genre_obj)
 
