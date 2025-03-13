@@ -89,7 +89,8 @@ If you’d like to contribute to this project:
     git checkout -b feature-branch
 ~~~
 
-- Commit your changes 
+
+- Commit your changes
    ~~~bash
    git commit -m "Added new feature"
 ~~~
