@@ -15,7 +15,7 @@ Base.metadata.create_all(engine)
 @click.group()
 def cli():
     """CLI for Video Games Management"""
-    pass
+   
 
 # Add a new game
 @click.command()
@@ -26,7 +26,7 @@ def add_game(game_id, name, year):
     """Adds a new game to the collection"""
     session = SessionLocal()
 
-    # If game_id is provided, use it; otherwise, let the database assign one
+    # provide game_id or the database wil assign one
     if game_id:
         game = Game(id=game_id, title=name, year=year)
     else:
