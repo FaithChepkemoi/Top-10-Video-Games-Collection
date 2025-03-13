@@ -64,15 +64,17 @@ Once the program is running, use the following commands to run:
    ~~~bash
     python3 main.py list-games
 ~~~
-4. *edit game*:
+ 4. *edit game*:
    ~~~bash
     python3 main.py edit-game
 ~~~
-5. *Rank the game*:
+
+ 5. *Rank the game*:
    ~~~bash
     python3 main.py rank-game
 ~~~
-6. *Sort games*:
+
+ 6. *Sort games*:
    ~~~bash
     python3 main.py sort-games
 ~~~
